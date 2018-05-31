@@ -12,6 +12,21 @@
 volatile unsigned long g_seconds;
 //NOTE: A unsigned long holds values from 0 to 4,294,967,295 (2^32 - 1). It will roll over to 0 after reaching its maximum value.
 
+void set_gsm_enable_config(uint8_t * port, uint8_t pin){
+    eeprom_write_byte(GSM_REG_PORT_ADDR, port);
+    eeprom_write_byte(GSM_REG_PIN_ADDR, pin);
+}
+
+void set_ota_server_config(uint8_t * ip_addr, uint16_t port){
+  eeprom_write_byte(OTA_SERVER_IP_1, ip_addr[0]);
+  eeprom_write_byte(OTA_SERVER_IP_2, ip_addr[1]);
+  eeprom_write_byte(OTA_SERVER_IP_3, ip_addr[2]);
+  eeprom_write_byte(OTA_SERVER_IP_4, ip_addr[3]);
+  
+  eeprom_write_byte(OTA_SERVER_PORT_H, port & 0xFF);
+  eeprom_write_byte(OTA_SERVER_PORT_L, port >> 8);
+}
+
 void change_pin_state(uint8_t *port, uint8_t pin, uint8_t value){
     unsigned char * ddr = port - 1;
     *ddr |= (1 << pin);
@@ -113,11 +128,11 @@ void get_ota_server_ip_str(char * ip_str){
 }
 
 void get_server_port_str(char * port_str){
-	uint8_t port_h = eeprom_read_byte(OTA_SERVER_PORT_H);
-	uint8_t port_l = eeprom_read_byte(OTA_SERVER_PORT_L);
-	uint16_t port = ((uint16_t)port_h << 8) | port_l;
+  uint8_t port_h = eeprom_read_byte(OTA_SERVER_PORT_H);
+  uint8_t port_l = eeprom_read_byte(OTA_SERVER_PORT_L);
+  uint16_t port = ((uint16_t)port_l << 8) | port_h;
 
-	sprintf(port_str, "%d", port);
+  sprintf(port_str, "%d", port);
 }
 
 uint8_t gsm_loop(void){
