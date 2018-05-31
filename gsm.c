@@ -30,10 +30,10 @@ void set_gsm_enable_config(uint8_t * port, uint8_t pin){
 }
 
 void set_ota_server_config(uint8_t * ip_addr, uint16_t port){
-  eeprom_write_byte(OTA_SERVER_IP_1, ip_addr[0]);
-  eeprom_write_byte(OTA_SERVER_IP_2, ip_addr[1]);
-  eeprom_write_byte(OTA_SERVER_IP_3, ip_addr[2]);
-  eeprom_write_byte(OTA_SERVER_IP_4, ip_addr[3]);
+  eeprom_write_byte(OTA_SERVER_IP_0, ip_addr[0]);
+  eeprom_write_byte(OTA_SERVER_IP_1, ip_addr[1]);
+  eeprom_write_byte(OTA_SERVER_IP_2, ip_addr[2]);
+  eeprom_write_byte(OTA_SERVER_IP_3, ip_addr[3]);
   
   eeprom_write_byte(OTA_SERVER_PORT_H, port & 0xFF);
   eeprom_write_byte(OTA_SERVER_PORT_L, port >> 8);
@@ -131,10 +131,10 @@ void turn_modem_off(void){
 }
 
 void get_ota_server_ip_str(char * ip_str){
-	uint8_t ip_1 = eeprom_read_byte(OTA_SERVER_IP_1);
-	uint8_t ip_2 = eeprom_read_byte(OTA_SERVER_IP_2);
-	uint8_t ip_3 = eeprom_read_byte(OTA_SERVER_IP_3);
-	uint8_t ip_4 = eeprom_read_byte(OTA_SERVER_IP_4);
+	uint8_t ip_1 = eeprom_read_byte(OTA_SERVER_IP_0);
+	uint8_t ip_2 = eeprom_read_byte(OTA_SERVER_IP_1);
+	uint8_t ip_3 = eeprom_read_byte(OTA_SERVER_IP_2);
+	uint8_t ip_4 = eeprom_read_byte(OTA_SERVER_IP_3);
 
 	sprintf(ip_str, "%d.%d.%d.%d", ip_1, ip_2, ip_3, ip_4);
 }
