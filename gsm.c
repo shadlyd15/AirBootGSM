@@ -12,6 +12,18 @@
 volatile unsigned long g_seconds;
 //NOTE: A unsigned long holds values from 0 to 4,294,967,295 (2^32 - 1). It will roll over to 0 after reaching its maximum value.
 
+void get_tcp_trans_cmd(uint8_t * cmd){
+  char ip_str[32];
+  char port_str[12];
+  memset(ip_str, 0x00, 32);
+  memset(port_str, 0x00, 12);
+  
+  get_ota_server_ip_str(ip_str);
+  get_server_port_str(port_str);
+
+  sprintf(cmd, "AT+TCPTRANS=%s,%s\r", ip_str, port_str);
+}
+
 void set_gsm_enable_config(uint8_t * port, uint8_t pin){
     eeprom_write_byte(GSM_REG_PORT_ADDR, port);
     eeprom_write_byte(GSM_REG_PIN_ADDR, pin);
