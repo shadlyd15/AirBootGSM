@@ -1,0 +1,9 @@
+avrdude -c usbasp -p atmega328p -u -U flash:w:filename.hex
+
+avrdude -p m128 -c stk500 -e -U flash:w:diag.hex
+
+avrdude -c usbasp -p atmega328p -u -U flash:r:filename.hex:i
+
+sudo picocom /dev/ttyACM0 -b 115200
+
+make atmega328p_16MHz
