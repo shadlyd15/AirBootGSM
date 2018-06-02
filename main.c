@@ -58,7 +58,7 @@ int main(void){
 				watchdogConfig(WATCHDOG_1S);
 			}
 		}
-		else{// on wdt
+		else{	// on wdt
 			DEBUG(uart_puts("OTA Signal Not Found\r\n"));
 			DEBUG(uart_puts("Starting Application\r\n"));
 			appStart();	
@@ -69,12 +69,33 @@ int main(void){
 		DEBUG(uart_puts("Brown Out Reset\r\n"));
 	}
 	else if(ch & _BV(EXTRF)){
-		// watchdogConfig(WATCHDOG_1S);
+		watchdogConfig(WATCHDOG_1S);
 		DEBUG(uart_puts("External Reset\r\n"));
-
-		uart_puts("Starting OTA\r\n");
-    	watchdogDisable();
-		gsm_loop();	
+		DEBUG(uart_puts("Starting OTA\r\n"));		
+		if(eeprom_read_byte(OTA_INIT_SIG_ADDR) == OTA_START_SIG){
+			DEBUG(uart_puts("OTA Signal Found\r\n"));
+			if(eeprom_read_byte(OTA_ATTEMPTED_ADDR) == OTA_ATTEMPTED_SIG){
+				DEBUG(uart_puts("Optiboot Attempted Before\r\n"));
+				eeprom_write_byte(OTA_ATTEMPTED_ADDR, 0xFF);
+				DEBUG(uart_puts("Starting Application\r\n"));
+				appStart();
+			}
+			else{
+				eeprom_write_byte(OTA_ATTEMPTED_ADDR, OTA_ATTEMPTED_SIG);
+				if(eeprom_read_byte(OTA_STAUS_ADDR) == OTA_COMPLETED){
+					eeprom_write_byte(OTA_STAUS_ADDR, 0xFF);
+				}
+				DEBUG(uart_puts("Attempting Optiboot\r\n"));
+				DEBUG(uart_puts("GSM Loop\r\n"));
+				gsm_loop();
+				watchdogConfig(WATCHDOG_1S);
+			}
+		}
+		else{	// on wdt
+			DEBUG(uart_puts("OTA Signal Not Found\r\n"));
+			DEBUG(uart_puts("Starting Application\r\n"));
+			appStart();	
+		}
 	}
 	else if(ch & _BV(PORF)){
 		watchdogConfig(WATCHDOG_1S);
@@ -85,7 +106,7 @@ int main(void){
 		DEBUG(uart_puts("Invalid Firmware\r\n"));
 	}
 
-	DEBUG(uart_puts("-- Optiboot Starts Now --\r\n"));
+	// DEBUG(uart_puts("-- Optiboot Starts Now --\r\n"));
 	optiboot();
 
 	DEBUG(uart_puts("Bootloader Ends Here. Starting App\r\n"));

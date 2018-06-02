@@ -12,21 +12,29 @@
 volatile unsigned long g_seconds;
 //NOTE: A unsigned long holds values from 0 to 4,294,967,295 (2^32 - 1). It will roll over to 0 after reaching its maximum value.
 
-void get_tcp_trans_cmd(uint8_t * cmd){
-  char ip_str[32];
-  char port_str[12];
-  memset(ip_str, 0x00, 32);
-  memset(port_str, 0x00, 12);
-  
-  get_ota_server_ip_str(ip_str);
-  get_server_port_str(port_str);
+uint8_t get_tcp_trans_cmd(uint8_t * cmd){
+  if(cmd){
+	  char ip_str[32];
+	  char port_str[12];
+	  memset(ip_str, 0x00, 32);
+	  memset(port_str, 0x00, 12);
+	  
+	  get_ota_server_ip_str(ip_str);
+	  get_server_port_str(port_str);
 
-  sprintf(cmd, "AT+TCPTRANS=%s,%s\r", ip_str, port_str);
+	  sprintf(cmd, "AT+TCPTRANS=%s,%s\r\n", ip_str, port_str);  	
+	  return 1;
+  }
+  return 0;
 }
 
-void set_gsm_enable_config(uint8_t * port, uint8_t pin){
-    eeprom_write_byte(GSM_REG_PORT_ADDR, port);
-    eeprom_write_byte(GSM_REG_PIN_ADDR, pin);
+uint8_t set_gsm_enable_config(uint8_t * port, uint8_t pin){
+	if(port){
+	    eeprom_write_byte(GSM_REG_PORT_ADDR, port);
+	    eeprom_write_byte(GSM_REG_PIN_ADDR, pin);	
+	    return 1;
+	}
+	return 0;
 }
 
 void set_ota_server_config(uint8_t * ip_addr, uint16_t port){
@@ -111,7 +119,8 @@ uint8_t send_at_command(char * ATcommand, char * expected_resp, unsigned long ti
 		}
 	}
 	while(((unsigned long)(elapsed_seconds() - start_time) < timeout) || answer); 
-	return answer;	
+	// return answer;	
+	return 1;
 }
 
 void turn_modem_on(void){
@@ -225,15 +234,17 @@ uint8_t gsm_loop(void){
 			}
 
 			case CONNECT_TCP:{
-				if(send_at_command(AT_TCP_TRANS, "+TCPTRANS: OK", 5)){
-					gsm_state = IDLE;
-					return OK;
+				char AT_TCP_TRANS[128]; 
+				memset(AT_TCP_TRANS, 0x00, 128);
+				if(get_tcp_trans_cmd(AT_TCP_TRANS)){
+					if(send_at_command(AT_TCP_TRANS, "+TCPTRANS: OK", 5)){
+						gsm_state = IDLE;
+						return OK;
+					}	
 				}
-				else{
-					turn_modem_off();
-					_delay_ms(1000);
-					gsm_state = INITIAL;
-				}
+				turn_modem_off();
+				_delay_ms(1000);
+				gsm_state = INITIAL;
 				break;
 			}
 

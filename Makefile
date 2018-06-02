@@ -152,8 +152,8 @@ atmega328p_16MHz: MCU_TARGET = atmega328p
 atmega328p_16MHz: CFLAGS += 
 atmega328p_16MHz: AVR_FREQ = 16000000L
 atmega328p_16MHz: LDSECTIONS = -Wl,--section-start=.text=0x7000 #-Wl,--section-start=.version=0x7ffe
-atmega328p_16MHz: $(PROGRAM)_atmega328p_8Mhz.hex
-atmega328p_16MHz: $(PROGRAM)_atmega328p_8Mhz.lst
+atmega328p_16MHz: $(PROGRAM)_atmega328p_16Mhz.hex
+atmega328p_16MHz: $(PROGRAM)_atmega328p_16Mhz.lst
 
 ## Atmega1284p
 atmega1284p_8MHz: TARGET = atmega1284p_8MHz
