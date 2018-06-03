@@ -11,7 +11,10 @@ int  main(void) __attribute__ ((section (".init9")));
 void appStart(void) __attribute__ ((naked));
 
 int main(void){
+    watchdogDisable();
     uint8_t ch;
+    DDRD &= ~(_BV(PD7));
+    PORTD |= (1 << PD7);
 
     /* This code makes the following assumptions:
      * No interrupts will execute
@@ -74,6 +77,13 @@ int main(void){
 		DEBUG(uart_puts("Starting OTA\r\n"));		
 		if(eeprom_read_byte(OTA_INIT_SIG_ADDR) == OTA_START_SIG){
 			DEBUG(uart_puts("OTA Signal Found\r\n"));
+			if(bit_is_clear(PIND, PD7)) {
+				while(bit_is_clear(PIND, PD7));
+				uart_puts("-- Clearing GSM OTA Flag --");
+				eeprom_write_byte(OTA_INIT_SIG_ADDR, 0xFF);
+				watchdogConfig(WATCHDOG_16MS);
+				_delay_ms(1000);
+			}
 			if(eeprom_read_byte(OTA_ATTEMPTED_ADDR) == OTA_ATTEMPTED_SIG){
 				DEBUG(uart_puts("Optiboot Attempted Before\r\n"));
 				eeprom_write_byte(OTA_ATTEMPTED_ADDR, 0xFF);
@@ -102,7 +112,7 @@ int main(void){
 		DEBUG(uart_puts("Power Reset\r\n"));
 	}
 	else{
-		watchdogConfig(WATCHDOG_1S);
+		// watchdogConfig(WATCHDOG_1S);
 		DEBUG(uart_puts("Invalid Firmware\r\n"));
 	}
 
