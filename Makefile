@@ -1,5 +1,5 @@
 # program name should not be changed ...
-PROGRAM    = gsm_bootloader
+PROGRAM    = AirBootGSM
 DEBUG 	   = enable
 # DEBUG 	   = disable
 
@@ -110,16 +110,16 @@ atmega16_8MHz: MCU_TARGET = atmega16
 atmega16_8MHz: CFLAGS += 
 atmega16_8MHz: AVR_FREQ = 8000000L
 atmega16_8MHz: LDSECTIONS  = -Wl,--section-start=.text=0x1e00 -Wl,--section-start=.version=0x1ffe
-atmega16_8MHz: $(PROGRAM)_atmega8_8MHz.hex
-atmega16_8MHz: $(PROGRAM)_atmega8_8MHz.lst
+atmega16_8MHz: $(PROGRAM)_atmega16_8MHz.hex
+atmega16_8MHz: $(PROGRAM)_atmega16_8MHz.lst
 
 atmega16_16MHz: TARGET = atmega16_16MHz
 atmega16_16MHz: MCU_TARGET = atmega16
 atmega16_16MHz: CFLAGS += 
 atmega16_16MHz: AVR_FREQ = 16000000L
 atmega16_16MHz: LDSECTIONS  = -Wl,--section-start=.text=0x1e00 -Wl,--section-start=.version=0x1ffe
-atmega16_16MHz: $(PROGRAM)_atmega8_16MHz.hex
-atmega16_16MHz: $(PROGRAM)_atmega8_16MHz.lst
+atmega16_16MHz: $(PROGRAM)_atmega16_16MHz.hex
+atmega16_16MHz: $(PROGRAM)_atmega16_16MHz.lst
 
 ## ATmega168
 atmega168_8MHz: TARGET = atmega168_8MHz
@@ -127,16 +127,16 @@ atmega168_8MHz: MCU_TARGET = atmega168
 atmega168_8MHz: CFLAGS += 
 atmega168_8MHz: AVR_FREQ = 8000000L
 atmega168_8MHz: LDSECTIONS  = -Wl,--section-start=.text=0x1e00 -Wl,--section-start=.version=0x1ffe
-atmega168_8MHz: $(PROGRAM)_atmega8_8MHz.hex
-atmega168_8MHz: $(PROGRAM)_atmega8_8MHz.lst
+atmega168_8MHz: $(PROGRAM)_atmega168_8MHz.hex
+atmega168_8MHz: $(PROGRAM)_atmega168_8MHz.lst
 
 atmega168_16MHz: TARGET = atmega168_16MHz
 atmega168_16MHz: MCU_TARGET = atmega168
 atmega168_16MHz: CFLAGS += 
 atmega168_16MHz: AVR_FREQ = 16000000L
 atmega168_16MHz: LDSECTIONS  = -Wl,--section-start=.text=0x1e00 -Wl,--section-start=.version=0x1ffe
-atmega168_16MHz: $(PROGRAM)_atmega8_16MHz.hex
-atmega168_16MHz: $(PROGRAM)_atmega8_16MHz.lst
+atmega168_16MHz: $(PROGRAM)_atmega168_16MHz.hex
+atmega168_16MHz: $(PROGRAM)_atmega168_16MHz.lst
 
 ## ATmega328p
 atmega328p_8MHz: TARGET = atmega328p_8MHz
@@ -156,7 +156,7 @@ atmega328p_16MHz: $(PROGRAM)_atmega328p_16Mhz.hex
 atmega328p_16MHz: $(PROGRAM)_atmega328p_16Mhz.lst
 
 ## Atmega1284p
-atmega1284p_8MHz: TARGET = atmega1284p_8MHz
+atmega1284p_8MHz: TARGET = _atmega1284p_8MHz
 atmega1284p_8MHz: MCU_TARGET = atmega1284p
 atmega1284p_8MHz: CFLAGS += 
 atmega1284p_8MHz: AVR_FREQ = 8000000L

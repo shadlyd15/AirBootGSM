@@ -5,9 +5,6 @@
 
 #define SIZE_RX_BUFFER 		32
 #define SIZE_RESPONSE		SIZE_RX_BUFFER
-#define GSM_SWITCH_DDR		DDRC
-#define GSM_SWITCH_PORT		PORTC
-#define GSM_SWITCH_PIN		2
 
 #define OK 1
 #define NOT_OK 0

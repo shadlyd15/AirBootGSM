@@ -1,0 +1,4 @@
+startOta			KEYWORD1
+getOtaStatus		KEYWORD1
+setGsmEnablePin		KEYWORD1
+setOtaServer		KEYWORD1

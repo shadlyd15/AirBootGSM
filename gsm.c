@@ -22,7 +22,7 @@ uint8_t get_tcp_trans_cmd(uint8_t * cmd){
 	  get_ota_server_ip_str(ip_str);
 	  get_server_port_str(port_str);
 
-	  sprintf(cmd, "AT+TCPTRANS=%s,%s\r\n", ip_str, port_str);  	
+	  sprintf(cmd, "%s%s,%s\r\n", AT_TCP_TRANS, ip_str, port_str);  	
 	  return 1;
   }
   return 0;
@@ -119,8 +119,7 @@ uint8_t send_at_command(char * ATcommand, char * expected_resp, unsigned long ti
 		}
 	}
 	while(((unsigned long)(elapsed_seconds() - start_time) < timeout) || answer); 
-	// return answer;	
-	return 1;
+	return answer;
 }
 
 void turn_modem_on(void){

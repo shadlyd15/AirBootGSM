@@ -1,5 +1,6 @@
 #include <avr/eeprom.h>
-#include "gsm_ota.h"
+#include <avr/wdt.h>
+#include "AirBootGSMLib.h"
 #include "eeprom_addr.h"
 
 void GSM_OTA::setGsmEnablePin(uint8_t * port, uint8_t pin){
@@ -36,8 +37,9 @@ void GSM_OTA::setOtaServer(uint8_t * ip_addr, uint16_t port){
 
 int GSM_OTA::startOta(){
 	if(isOtaServerSet && isGsmEnablePinSet){
-		if(eeprom_read_byte(OTA_INIT_SIG_ADDR) != OTA_START_SIG)
+		if(eeprom_read_byte(OTA_INIT_SIG_ADDR) != OTA_START_SIG){
 	  		eeprom_write_byte(OTA_INIT_SIG_ADDR, OTA_START_SIG);
+	  	}
 		wdt_enable(WDTO_15MS);
 		delay(1000);	
 	}
@@ -45,14 +47,9 @@ int GSM_OTA::startOta(){
 }
 
 int GSM_OTA::getOtaStatus(){
-  if(eeprom_read_byte(OTA_INIT_SIG_ADDR) == OTA_START_SIG){
-    eeprom_write_byte(OTA_INIT_SIG_ADDR, 0xFF);
-    if(eeprom_read_byte(OTA_STAUS_ADDR) == OTA_COMPLETED){
-      return OTA_SUCCESS;
-    }
-    else{
-    	return OTA_SUCCESS;
-    }
-  }
-  return FIRMWARE_OK;
+	if(eeprom_read_byte(OTA_INIT_SIG_ADDR) == OTA_START_SIG){
+		eeprom_write_byte(OTA_INIT_SIG_ADDR, 0xFF);
+		return OTA_SUCCESS;
+	}
+	return FIRMWARE_OK;
 }
