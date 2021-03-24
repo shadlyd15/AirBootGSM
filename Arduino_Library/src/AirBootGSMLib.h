@@ -13,10 +13,11 @@ typedef enum otaStatus{
     FIRMWARE_OK = 2
 } otaStatus_t;
 
-class GSM_OTA{
+class AirBoot{
 	public:
-		int startOta();
+		void stopOta();
 		int getOtaStatus();	
+		int startOta(uint8_t * ip_addr, uint16_t port);
 		void setGsmEnablePin(uint8_t * port, uint8_t pin);
 		void setOtaServer(uint8_t * ip_addr, uint16_t port);
 	private:

@@ -3,7 +3,7 @@
 #include "AirBootGSMLib.h"
 #include "eeprom_addr.h"
 
-void GSM_OTA::setGsmEnablePin(uint8_t * port, uint8_t pin){
+void AirBoot::setGsmEnablePin(uint8_t * port, uint8_t pin){
 	this->isGsmEnablePinSet = 1;
 	if(eeprom_read_byte(GSM_REG_PORT_ADDR) != port){
 		eeprom_write_byte(GSM_REG_PORT_ADDR, port);	
@@ -14,7 +14,7 @@ void GSM_OTA::setGsmEnablePin(uint8_t * port, uint8_t pin){
 	}
 }
 
-void GSM_OTA::setOtaServer(uint8_t * ip_addr, uint16_t port){
+void AirBoot::setOtaServer(uint8_t * ip_addr, uint16_t port){
 	this->isOtaServerSet = 1;
 	if(eeprom_read_byte(OTA_SERVER_IP_0) != ip_addr[0])
 		eeprom_write_byte(OTA_SERVER_IP_0, ip_addr[0]);
@@ -35,7 +35,8 @@ void GSM_OTA::setOtaServer(uint8_t * ip_addr, uint16_t port){
 		eeprom_write_byte(OTA_SERVER_PORT_L, port >> 8);
 }
 
-int GSM_OTA::startOta(){
+int AirBoot::startOta(uint8_t * ip_addr, uint16_t port){
+	this->setOtaServer(ip_addr, port);
 	if(isOtaServerSet && isGsmEnablePinSet){
 		if(eeprom_read_byte(OTA_INIT_SIG_ADDR) != OTA_START_SIG){
 	  		eeprom_write_byte(OTA_INIT_SIG_ADDR, OTA_START_SIG);
@@ -46,7 +47,21 @@ int GSM_OTA::startOta(){
 	return -1;
 }
 
-int GSM_OTA::getOtaStatus(){
+
+void AirBoot::stopOta(){
+  if(eeprom_read_byte(OTA_INIT_SIG_ADDR) == OTA_START_SIG){
+    // if(eeprom_read_byte(OTA_STAUS_ADDR) == OTA_COMPLETED){
+      // Serial.println("Firmware Upgraded");
+    // }
+    // else{
+    //   Serial.println("Firmware Upgrade Failed");
+    // }
+    eeprom_write_byte(OTA_INIT_SIG_ADDR, 0xFF);
+  }
+}
+
+
+int AirBoot::getOtaStatus(){
 	if(eeprom_read_byte(OTA_INIT_SIG_ADDR) == OTA_START_SIG){
 		eeprom_write_byte(OTA_INIT_SIG_ADDR, 0xFF);
 		return OTA_SUCCESS;

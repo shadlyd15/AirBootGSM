@@ -1,12 +1,10 @@
-# AirBootGSM : An AVR & Arduino GSM OTA Bootloader
+## AirBootGSM : An AVR & Arduino GSM OTA Bootloader
 
 This is proof of concept AVR & Arduino bootloader for upgrading firmware over the air using GSM modem. It is kind of fail-safe. If anything wrong happens and the chip does not boot after the firmware upgrade, the bootloader automatically retries to download and reinstall new firmware. AirBootGSM is based on highly optimized [Optiboot Bootloader.](https://github.com/Optiboot/optiboot)
 
-## Limitations : 
-Currently it only supports Neoway GSM modems that support Transparet TCP mode. To keep compiled binary as small as possible to fit with a few KBs, readability of the code is greatly hampared. Still any other modems can easily be adopted.
-
 ## Setup Toolchain to Compile :
 ```bash
+sudo apt-get update
 sudo apt-get install binutils gcc-avr avr-libc uisp avrdude flex byacc bison
 ```
 
@@ -106,3 +104,6 @@ void loop() {
   }
 }
 ```
+
+## Limitations : 
+Currently it only supports Neoway GSM modems that support Transparet TCP mode. To keep compiled binary as small as possible to fit with a few KBs, readability of the code is greatly hampared. Still any other modems can easily be adopted.
