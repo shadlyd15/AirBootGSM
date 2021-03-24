@@ -30,6 +30,7 @@ void setup() {
   Serial.println("\r\n-- Application Starts --");
   stop_ota();
   memset(buff, 0x00, 128);
+  setOtaServer("192.12.23.44", 8888);
 }
 
 // the loop function runs over and over again forever
