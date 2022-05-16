@@ -1,6 +1,6 @@
 ## AirBootGSM : An AVR & Arduino GSM OTA Bootloader
 
-This is proof of concept AVR & Arduino bootloader for upgrading firmware over the air using GSM modem. It is kind of fail-safe. If anything wrong happens and the chip does not boot after the firmware upgrade, the bootloader automatically retries to download and reinstall new firmware. AirBootGSM is based on highly optimized [Optiboot Bootloader.](https://github.com/Optiboot/optiboot)
+AirBootGSM is a AVR & Arduino bootloader for upgrading firmware over the air using GSM modem. It is kind of fail-safe. If anything wrong happens and the chip does not boot after the firmware upgrade, the bootloader automatically retries to download and reinstall new firmware. AirBootGSM is based on highly optimized [Optiboot Bootloader.](https://github.com/Optiboot/optiboot)
 
 ## Setup Toolchain to Compile :
 ```bash
